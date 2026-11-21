@@ -2,5 +2,5 @@
 const fs = require("fs");
 fs.mkdirSync("dist", { recursive: true });
 fs.copyFileSync("index.html", "dist/index.html");
-fs.writeFileSync("dist/config.js", `window.API_URL=${JSON.stringify(process.env.API_URL || "http://localhost:8000")};\n`);
-console.log("built dist/ with API_URL =", process.env.API_URL || "http://localhost:8000");
+fs.writeFileSync("dist/config.js", `window.API_URL=${JSON.stringify(process.env.API_URL || "https://ai-chat-litellm.onrender.com")};\n`);
+console.log("built dist/ with API_URL =", process.env.API_URL || "https://ai-chat-litellm.onrender.com");
