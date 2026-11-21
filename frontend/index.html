@@ -41,7 +41,7 @@ button:disabled{opacity:.5;cursor:wait}
 </footer>
 <script src="config.js"></script>
 <script>
-const API = (window.API_URL || "http://localhost:8000").replace(/\/$/, "");
+const API = (location.hostname.endsWith("vercel.app") ? "https://ai-chat-litellm.onrender.com" : (window.API_URL || "http://localhost:8000")).replace(/\/$/, "");
 const sessionId = "s-" + (crypto.randomUUID ? crypto.randomUUID().slice(0, 8) : Math.random().toString(16).slice(2, 10));
 const chat = document.getElementById("chat"), inp = document.getElementById("inp"),
       btn = document.getElementById("btn"), sys = document.getElementById("sys");
