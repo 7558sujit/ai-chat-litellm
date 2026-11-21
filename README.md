@@ -1,8 +1,8 @@
 # AI Chat — FastAPI + LiteLLM + SQLite
 
 ## 1. Live URLs
-- Frontend: `https://<your-frontend>.vercel.app`
-- Backend: `https://<your-backend>.onrender.com` (`/health`)
+- Frontend: `https://ai-chat-litellm.vercel.app`
+- Backend: `https://ai-chat-litellm.onrender.com` (`/health`)
 
 ## 2. Run locally
 **Docker:** `cp .env.example .env` (add 2+ real keys) → `make up` → UI http://localhost:3000, API http://localhost:8000. `make down` stops it; the `appdata` volume keeps history.
@@ -27,7 +27,7 @@ Tests: `make test`.
 
 ## 4. Verification
 ```bash
-B=https://<backend>
+B=https://ai-chat-litellm.onrender.com
 curl -s -XPOST $B/chat -H 'content-type: application/json' -d '{"session_id":"t1","message":"Capital of France?"}'   # LIVE_INFERENCE
 curl -s -XPOST $B/chat -H 'content-type: application/json' -d '{"session_id":"t2","message":"Capital of France?"}'   # LLM_CACHE, key_id null
 curl -s -XPOST $B/chat -H 'content-type: application/json' -H 'X-Simulate-Failure: key_1=429' -d '{"session_id":"t3","message":"hi"}'  # key_id key_2, fallback_attempts 1
@@ -37,8 +37,13 @@ curl -s $B/sessions/t1/messages
 Token counts and source appear under every reply in the UI (`meta-*` test ids).
 
 ## 5. Setup Used
-Editor: <fill in>. AI tools: Claude (scaffolding, tests), LiteLLM docs.
+Editor: Notepad / VS Code. AI tools: Claude (scaffolding, tests), LiteLLM docs.
 
 ## 6. Bonus features
 - Optional per-session system prompt field (`system-prompt-input`).
 - Dark mode, non-root Docker user, `make test`.
+
+## Deployment notes
+- Backend runs on Render's free tier with the model groq/openai/gpt-oss-20b. The free tier has no persistent disk, so SQLite history resets when the service restarts; a paid instance with a disk mounted at /data keeps it.
+- Both keys come from one Groq account, so they share a quota; failover is demonstrated with X-Simulate-Failure.
+- The first request after idle time can take 50 seconds or more while the free instance wakes up.
